@@ -1,0 +1,28 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ template "nginx-test.fullname" . }}
+  labels:
+    {{- include "nginx-test.labels" . | nindent 4 }}
+data:
+  test.conf: |
+    server {
+      listen 31808 default;
+      listen [::]:31808 default;
+      location /livez {
+        access_log off;
+        return 200;
+      }
+      location /readyz {
+        access_log off;
+        return 200;
+      }
+      location /ping {
+        return 222;
+      }
+      location /stub_status {
+        stub_status on;
+        access_log off;
+      }
+    }
+
